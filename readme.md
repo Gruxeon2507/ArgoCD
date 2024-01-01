@@ -39,11 +39,3 @@ kubectl apply -f argocd/development/base.yaml
 3. ArgoCD will automatically sync the Kubernetes resources defined in the [`k8s/env/development`](command:_github.copilot.openRelativePath?%5B%22k8s%2Fenv%2Fdevelopment%22%5D "k8s/env/development") directory.
 
 Please replace `development` with `production` for production environment.
-
-## Contributing
-
-Contributions are welcome. Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
