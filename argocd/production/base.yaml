@@ -1,0 +1,44 @@
+apuVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: application-set
+spec:
+  generators:
+   - list:
+       elements:
+       - name: appicaltion-name
+         namespace: appicaltion-namespace
+         envs: development
+         path: k8s/env/development
+         url: https://kubernetes.default.svc
+     selector:
+        matchLabels:
+          envs: production
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: '{{namespace}}'
+      source:
+        repoURL: 'https://github.com/username/repo.git' # This should be your gitops repo
+        targetRevision: master
+        path: '{{path}}'
+      destination:
+        server: '{{url}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: true
+          allowClusterAdmin: true
+          retry:
+            limit: 3
+            backoff:
+              duration: 5
+              factor: 2
+              maxDuration: 15
+        syncOptions:
+        - CreateNamespace=true
+        - Validate=false
+        - Prune=true
+        - Force=true
+        - ApplyOutOfSyncOnly=true

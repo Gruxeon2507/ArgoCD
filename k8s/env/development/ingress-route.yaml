@@ -1,0 +1,14 @@
+#this this ingress used for treafik ingress controller
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: appicaltion-name-ingress-route
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`appicaltion-name.localhost`)
+    kind: Rule
+    services:
+    - name: appicaltion-name
+      port: 8080

@@ -1,0 +1,57 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: appicaltion-name
+spec:
+  replica: 1
+  strategy:
+    type: recreate
+  selector:
+    matchLabels:
+      app: appicaltion-name # This should match with the label in the pod template
+  template:
+    metadata:
+      labels:
+        app: appicaltion-name # This should match with the label in the selector
+    spec:
+      containers:
+        - name: appicaltion-name
+          image: appicaltion-name:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV
+              value: "dev"
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          envFrom:
+            - configMapRef:
+                name: appicaltion-name-configmap
+            - secretRef:
+                name: appicaltion-name-secret
+          workingDir: /app 
+          volumeMounts:
+            - name: appicaltion-name-volume
+              mountPath: /app
+          command: ["/bin/sh"]
+          liveProbe:
+            httpGet:
+              path: /actuator/liveliness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3

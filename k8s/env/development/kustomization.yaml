@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: appicaltion-namespace # This should match with the namespace in the deployment.yaml
+commonLabels:
+  app.kubernetes.io/environment: development
+resources:
+  - ../../base
+  - configmap.yaml
+  - ingress-route.yaml
+  - namespace.yaml
+  
